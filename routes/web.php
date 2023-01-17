@@ -28,3 +28,12 @@ Route::get('/test-orm', function () {
         echo "<hr>";
     }
 });
+
+//Api Route
+Route::get('/user/test','UserController@test');
+Route::get('/category/test','CategoryController@test');
+Route::get('/post/test','PostController@test');
+
+//User
+Route::post('/api/register','UserController@register');
+Route::post('/api/login','UserController@login');
