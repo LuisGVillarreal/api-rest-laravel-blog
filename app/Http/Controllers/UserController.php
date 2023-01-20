@@ -88,4 +88,17 @@ class UserController extends Controller{
 		}
 		return response()->json($signup, $signup['code']);
 	}
+
+	public function update(Request $request){
+		$token = $request->header("Authorization");
+		$JwtAuth = new \JwtAuth();
+		$checkToken = $JwtAuth->checkToken($token);
+
+		if ($checkToken) {
+			echo "<h1>Login Correcto</h1>";
+		}else{
+			echo "<h1>Login Incorrecto</h1>";
+		}
+		die();
+	}
 }
