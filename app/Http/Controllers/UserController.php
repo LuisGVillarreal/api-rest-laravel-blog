@@ -131,11 +131,26 @@ class UserController extends Controller{
 	}
 
 	public function upload(Request $request){
-		$data = array(
-			'status'	=> 'error',
-			'code'		=> 400,
-			'message'	=> "Uploaded data error"
-		);
+		//Get data
+		$image = $request->file('file0');
+		$validate = \Validator::make($request->all(), [
+				'file0'	=> 'required|image|mimes:jpg,jpeg,png,gif'
+			]);
+		if ($image && !$validate->fails()) {
+			$image_name = time().$image->getClientOriginalName();
+			\Storage::disk('users')->put($image_name, \File::get($image));
+			$data = array(
+				'status'	=> 'succes',
+				'code'		=> 200,
+				'image'		=> $image_name
+			);
+		}else{
+			$data = array(
+				'status'	=> 'error',
+				'code'		=> 400,
+				'message'	=> "Uploaded data error"
+			);
+		}
 		return response()->json($data, $data['code']);
 	}
 }
