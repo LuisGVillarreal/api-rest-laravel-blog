@@ -86,6 +86,6 @@ class UserController extends Controller{
 				$signup = $JwtAuth->signup($params->email, $params->password, true);
 			}
 		}
-		return response()->json($signup);
+		return response()->json($signup, $signup['code']);
 	}
 }
