@@ -1,9 +1,8 @@
-POST http://api-blog-laravel.com/api/register
+
+POST http://api-blog-laravel.com/api/login
 Content-type: application/x-www-form-urlencoded
 
 json: """{
-	"name": "Luis",
-	"surname": "Villarreal",
 	"email": "luis@me.com",
 	"password": "luis12345"
 }"""

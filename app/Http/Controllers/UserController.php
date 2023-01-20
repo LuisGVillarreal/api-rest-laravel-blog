@@ -35,13 +35,12 @@ class UserController extends Controller{
 				);
 			}else{
 				//Save user
-				$pwd = password_hash($params->password, PASSWORD_BCRYPT, ['cost' => 4]);
 				$user = new User();
 				$user->name = $params_array['name'];
 				$user->surname = $params_array['surname'];
 				$user->role = "USER";
 				$user->email = $params_array['email'];
-				$user->password = $pwd;
+				$user->password = \Hash::make($params->password);
 				$user->save();
 
 				$data = array(
@@ -63,6 +62,30 @@ class UserController extends Controller{
 	}
 
 	public function login(Request $request){
-		return "Action 'login' from User";
+		$JwtAuth = new \JwtAuth();
+		//Get user credential by Post
+		$json = $request->input("json", null);
+		$params = json_decode($json);
+		$params_array = json_decode($json, true);
+
+		//Validate credential
+		$validate = \Validator::make($params_array, [
+			'email'		=> 'required|email',
+			'password'	=> 'required'
+		]);
+		if ($validate->fails()) {
+			$signup = array(
+				'status'	=> 'error',
+				'code'		=> 422,
+				'message'	=> "Invalid data",
+				'errors'	=> $validate->errors()
+			);
+		}else{
+			$signup = $JwtAuth->signup($params->email, $params->password);
+			if (!empty($params->getToken)) {
+				$signup = $JwtAuth->signup($params->email, $params->password, true);
+			}
+		}
+		return response()->json($signup);
 	}
 }
