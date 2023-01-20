@@ -129,4 +129,13 @@ class UserController extends Controller{
 		}
 		return response()->json($update, $update['code']);
 	}
+
+	public function upload(Request $request){
+		$data = array(
+			'status'	=> 'error',
+			'code'		=> 400,
+			'message'	=> "Uploaded data error"
+		);
+		return response()->json($data, $data['code']);
+	}
 }
