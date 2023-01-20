@@ -169,4 +169,23 @@ class UserController extends Controller{
 			return response()->json($data, $data['code']);
 		}
 	}
+
+	public function detail($id){
+		$user = User::find($id);
+		if (is_object($user)) {
+			$detail = array(
+				'status'	=> 'success',
+				'code'		=> 200,
+				'message'	=> "User found",
+				'user'		=> $user
+			);
+		}else{
+			$detail = array(
+				'status'	=> 'error',
+				'code'		=> 404,
+				'message'	=> "User not found"
+			);
+		}
+		return response()->json($detail, $detail['code']);
+	}
 }
