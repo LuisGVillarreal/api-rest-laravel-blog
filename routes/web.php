@@ -37,4 +37,4 @@ Route::get('/post/test','PostController@test');
 //User
 Route::post('/api/register','UserController@register');
 Route::post('/api/login','UserController@login');
-Route::post('/api/user/update','UserController@update');
+Route::put('/api/user/update','UserController@update');
