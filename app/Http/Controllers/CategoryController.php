@@ -76,4 +76,39 @@ class CategoryController extends Controller{
 		return response()->json($store, $store['code']);
 	}
 
+	//Update
+	public function update($id, Request $request){
+		$json = $request->input('json', null);
+		$params_array = json_decode($json, true);
+
+		if (!empty($params_array)) {
+			$validate = \Validator::make($params_array, [
+				'name'	=> 'required'
+			]);
+			unset($params_array['id']);
+			unset($params_array['created_at']);
+
+			if ($validate->fails()) {
+				$store = [
+		        	'status'	=> "Error",
+		        	'code'		=> 400,
+		        	'message'	=>  $validate->errors()
+		        ];
+			} else {
+				$category = Category::where('id', $id)->update($params_array);
+				$store = [
+		        	'status'	=> "Success",
+		        	'code'		=> 200,
+		        	'category'	=> $params_array
+		        ];
+			}
+		}else{
+			$store = [
+		       	'status'	=> "Error",
+		       	'code'		=> 400,
+		       	'message'	=> "Data sent are not correct"
+		    ];
+		}
+		return response()->json($store, $store['code']);
+	}
 }
