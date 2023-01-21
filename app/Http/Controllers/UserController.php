@@ -8,10 +8,6 @@ use App\User;
 
 class UserController extends Controller{
 
-	public function test(Request $request){
-		return "Action 'test' from UserController";
-	}
-
 	public function register(Request $request){
 		//Get user data by Post
 		$json = $request->input("json", null);

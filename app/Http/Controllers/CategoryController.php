@@ -8,7 +8,7 @@ use App\Category;
 
 class CategoryController extends Controller{
 
-	function __construct($foo = null){
+	function __construct(){
 		$this->middleware('api.auth', ['except' => ['index', 'show']]);
 	}
 
