@@ -8,6 +8,10 @@ use App\Category;
 
 class CategoryController extends Controller{
 
+	function __construct($foo = null){
+		$this->middleware('api.auth', ['except' => ['index', 'show']]);
+	}
+
 	//Get all categories
     public function index(){
     	$categories = Category::all();
@@ -37,5 +41,39 @@ class CategoryController extends Controller{
 		return response()->json($category, $category['code']);
 	}
 
+	//Save
+	public function store(Request $request){
+		$json = $request->input('json', null);
+		$params_array = json_decode($json, true);
+
+		if (!empty($params_array)) {
+			$validate = \Validator::make($params_array, [
+				'name'	=> 'required'
+			]);
+			if ($validate->fails()) {
+				$store = [
+		        	'status'	=> "Error",
+		        	'code'		=> 400,
+		        	'message'	=>  $validate->errors()
+		        ];
+			} else {
+				$category = new Category();
+				$category->name = $params_array['name'];
+				$category->save();
+				$store = [
+		        	'status'	=> "Success",
+		        	'code'		=> 200,
+		        	'category'	=> $category,
+		        ];
+			}
+		} else {
+			$store = [
+		       	'status'	=> "Error",
+		       	'code'		=> 400,
+		       	'message'	=> "Data sent are not correct"
+		    ];
+		}
+		return response()->json($store, $store['code']);
+	}
 
 }
