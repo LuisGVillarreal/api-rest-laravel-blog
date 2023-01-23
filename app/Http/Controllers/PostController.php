@@ -55,7 +55,7 @@ class PostController extends Controller{
 			$validate = \Validator::make($params_array, [
 				'title' 		=> 'required',
 				'content' 		=> 'required',
-				'category_id' 	=> 'required',
+				'category_id' 	=> 'required|numeric',
 				'image'			=> 'required'
 
 			]);
@@ -89,7 +89,47 @@ class PostController extends Controller{
 				'message'	=> 'Error to send data'
 			];
 		}
-
 		return response()->json($store, $store['code']);
+	}
+
+	//Update a post
+	public function update($id, Request $request){
+		$json = $request->input('json', null);
+		$params_array = json_decode($json, true);
+
+		if (!empty($params_array)) {
+			$validate = \Validator::make($params_array, [
+				"title" 		=> "required",
+				"content"		=> "required",
+				"category_id"	=> "required|numeric",
+			]);
+			if ($validate->fails()) {
+				$update = [
+					'status'	=> "Error",
+					'code'		=> 400,
+					'message'	=> $validate->errors()
+				];
+			} else {
+				unset($params_array['id']);
+				unset($params_array['user_id']);
+				unset($params_array['created_at']);
+				unset($params_array['user']);
+
+				$post = Post::where('id', $id)->update($params_array);
+				$update = [
+					'status'	=> "Success",
+					'code'		=> 200,
+					'changes'		=> $params_array
+				];
+			}
+			
+		} else {
+			$update = [
+				'status'	=> "Error",
+				'code'		=> 400,
+				'message'	=> 'Error to send data'
+			];
+		}
+		return response()->json($update, $update['code']);
 	}
 }
