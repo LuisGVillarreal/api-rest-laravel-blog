@@ -48,9 +48,8 @@ class PostController extends Controller{
 		$params_array = json_decode($json, true);
 
 		if (!empty($params_array)) {
-			$jwtAuth = new JwtAuth();
-			$token = $request->header('Authorization', null);
-			$user = $jwtAuth->checkToken($token, true);
+			//Get auth user
+			$user = $this->getIdentity($request);
 
 			$validate = \Validator::make($params_array, [
 				'title' 		=> 'required',
@@ -115,19 +114,20 @@ class PostController extends Controller{
 				unset($params_array['created_at']);
 				unset($params_array['user']);
 
-				$post = Post::where('id', $id)->update($params_array);
+				//Get auth user
+				$user = $this->getIdentity($request);
+				$post = Post::where(['id' => $id, 'user_id' => $user->sub])->update($params_array);
 				$update = [
-					'status'	=> "Success",
-					'code'		=> 200,
-					'changes'		=> $params_array
+					'status'   => $post ? "Success" : "Error",
+					'code'     => $post ? 200 : 400,
+					'message'  => $post ? "Post updated successfully" : "Failed to update post"
 				];
 			}
-			
 		} else {
 			$update = [
 				'status'	=> "Error",
 				'code'		=> 400,
-				'message'	=> 'Error to send data'
+				'message'	=> 'Error to update'
 			];
 		}
 		return response()->json($update, $update['code']);
@@ -135,7 +135,11 @@ class PostController extends Controller{
 
 	//Delete a post
 	public function destroy($id, Request $request){
-		$post = Post::find($id);
+		//Get auth user
+		$user = $this->getIdentity($request);
+		$post = Post::where('id', $id)
+					->where('user_id', $user->sub)
+					->first();
 		if (!empty($post)) {
 			$post->delete();
 			$delete = [
@@ -147,9 +151,16 @@ class PostController extends Controller{
 			$delete = [
 				'status'	=> "Error",
 				'code'		=> 404,
-				'message'	=> 'Post not found'
+				'message'	=> 'Error to delete'
 			];
 		}
 		return response()->json($delete, $delete['code']);
+	}
+
+	private function getIdentity($request){
+		$jwtAuth = new JwtAuth();
+		$token = $request->header('Authorization', null);
+		$user = $jwtAuth->checkToken($token, true);
+		return $user;
 	}
 }

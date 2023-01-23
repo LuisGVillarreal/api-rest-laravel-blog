@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model{
     protected $table = 'posts';
 
+    protected $fillable = [
+        'title', 'content', 'category_id'
+    ];
+
     //Many to One
     public function user(){
         return $this->belongsTo('App\User','user_id');
