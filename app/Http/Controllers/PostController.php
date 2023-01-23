@@ -10,7 +10,7 @@ use App\Helpers\JwtAuth;
 class PostController extends Controller{
 
 	function __construct(){
-		$this->middleware('api.auth', ['except' => ['index', 'show']]);
+		$this->middleware('api.auth', ['except' => ['index', 'show', 'getImage']]);
 	}
 
 	//Get all posts
@@ -186,5 +186,25 @@ class PostController extends Controller{
 			];
 		}
 		return response()->json($data, $data['code']);
+	}
+
+	//Get a image
+	public function getImage($filename){
+		$isset = \Storage::disk('images')->exists($filename);
+		if ($isset) {
+			$file = \Storage::disk('images')->get($filename);
+			$file_mime = \File::mimeType(\Storage::disk('images')->path($filename));
+	        return response()->make($file, 200, [
+	            'Content-Type' => $file_mime,
+	            'Content-Disposition' => 'inline; filename="'.$filename.'"'
+	        ]);
+		}else{
+			$data = [
+				'status'	=> 'error',
+				'code'		=> 404,
+				'message'	=> "Image not found"
+			];
+			return response()->json($data, $data['code']);
+		}
 	}
 }
