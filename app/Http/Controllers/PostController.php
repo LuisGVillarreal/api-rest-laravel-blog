@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Post;
+use App\Helpers\JwtAuth;
 
 class PostController extends Controller{
 
@@ -39,5 +40,56 @@ class PostController extends Controller{
 			];
 		}
 		return response()->json($post, $post['code']);
+	}
+
+	//Save a post
+	public function store(Request $request){
+		$json = $request->input('json',null);
+		$params_array = json_decode($json, true);
+
+		if (!empty($params_array)) {
+			$jwtAuth = new JwtAuth();
+			$token = $request->header('Authorization', null);
+			$user = $jwtAuth->checkToken($token, true);
+
+			$validate = \Validator::make($params_array, [
+				'title' 		=> 'required',
+				'content' 		=> 'required',
+				'category_id' 	=> 'required',
+				'image'			=> 'required'
+
+			]);
+
+			if ($validate->fails()) {
+				$store = [
+					'status'	=> "Error",
+					'code'		=> 400,
+					'message'	=> $validate->errors()
+				];
+			} else {
+				$post = new Post();
+				$post->user_id 		= $user->sub;
+				$post->category_id 	= $params_array['category_id'];
+				$post->title 		= $params_array['title'];
+				$post->content		= $params_array['content'];
+				$post->image		= $params_array['image'];
+				$post->save();
+
+				$store = [
+					'status'	=> "Success",
+					'code'		=> 200,
+					'post'		=> $post
+				];
+			}
+			
+		} else {
+			$store = [
+				'status'	=> "Error",
+				'code'		=> 400,
+				'message'	=> 'Error to send data'
+			];
+		}
+
+		return response()->json($store, $store['code']);
 	}
 }
