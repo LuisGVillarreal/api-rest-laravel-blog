@@ -163,4 +163,28 @@ class PostController extends Controller{
 		$user = $jwtAuth->checkToken($token, true);
 		return $user;
 	}
+
+	//Upload image
+	public function upload(Request $request){
+		$image = $request->file('file0');
+		$validate = \Validator::make($request->all(), [
+			'file0'	=> 'required|image|mimes:jpg,jpeg,png,gif'
+		]);
+		if ($image && !$validate->fails()) {
+			$image_name = time().$image->getClientOriginalName();
+			\Storage::disk('images')->put($image_name, \File::get($image));
+			$data = [
+				'status'	=> 'succes',
+				'code'		=> 200,
+				'image'		=> $image_name
+			];
+		}else{
+			$data = [
+				'status'	=> 'error',
+				'code'		=> 400,
+				'message'	=> "Uploaded data error"
+			];
+		}
+		return response()->json($data, $data['code']);
+	}
 }
