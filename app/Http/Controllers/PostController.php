@@ -132,4 +132,24 @@ class PostController extends Controller{
 		}
 		return response()->json($update, $update['code']);
 	}
+
+	//Delete a post
+	public function destroy($id, Request $request){
+		$post = Post::find($id);
+		if (!empty($post)) {
+			$post->delete();
+			$delete = [
+				'status'	=> "Success",
+				'code'		=> 200,
+				'message'	=> 'Post deleted'
+			];
+		} else {
+			$delete = [
+				'status'	=> "Error",
+				'code'		=> 404,
+				'message'	=> 'Post not found'
+			];
+		}
+		return response()->json($delete, $delete['code']);
+	}
 }
