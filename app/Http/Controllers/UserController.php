@@ -17,8 +17,8 @@ class UserController extends Controller{
 		if (!empty($params) && !empty($params_array)) {
 			//Validate data
 			$validate = \Validator::make($params_array, [
-				'name'		=> 'required|alpha',
-				'surname'	=> 'required|alpha',
+				'name'		=> 'required|regex:/^[\pL\s]+$/u',
+				'surname'	=> 'required|regex:/^[\pL\s]+$/u',
 				'email'		=> 'required|email|unique:users',
 				'password'	=> 'required'
 			]);
@@ -98,8 +98,8 @@ class UserController extends Controller{
 			//Update user
 			$user = $JwtAuth->checkToken($token, true);
 			$validate = \Validator::make($params_array, [
-				'name'		=> 'required|alpha',
-				'surname'	=> 'required|alpha',
+				'name'		=> 'required|regex:/^[\pL\s]+$/u',
+				'surname'	=> 'required|regex:/^[\pL\s]+$/u',
 				'email'		=> 'required|email|unique:users,'.$user->sub,
 			]);
 
