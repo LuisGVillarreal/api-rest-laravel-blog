@@ -50,7 +50,7 @@ class PostController extends Controller{
 
 	//Save a post
 	public function store(Request $request){
-		$json = $request->input('json',null);
+		$json = $request->input('json', null);
 		$params_array = json_decode($json, true);
 
 		if (!empty($params_array)) {
@@ -118,7 +118,9 @@ class PostController extends Controller{
 				unset($params_array['id']);
 				unset($params_array['user_id']);
 				unset($params_array['created_at']);
+				unset($params_array['updated_at']);
 				unset($params_array['user']);
+				unset($params_array['category']);
 
 				//Get auth user
 				$user = $this->getIdentity($request);
