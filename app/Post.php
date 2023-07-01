@@ -5,7 +5,11 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model{
-    protected $table = 'post';
+    protected $table = 'posts';
+
+    protected $fillable = [
+        'title', 'content', 'category_id', 'image'
+    ];
 
     //Many to One
     public function user(){

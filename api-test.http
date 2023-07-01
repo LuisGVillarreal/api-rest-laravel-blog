@@ -1,0 +1,8 @@
+
+
+POST http://api-blog-laravel.com/api/user/upload
+Content-type: multipart/form-data
+Authorization: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEwLCJlbWFpbCI6Imx1aXNAbWUuY29tIiwibmFtZSI6Ikx1aXMiLCJzdXJuYW1lIjoiVmlsbGFycmVhbCIsImlhdCI6MTY3NDE5MDA3NiwiZXhwIjoxNjc0Nzk0ODc2fQ.eDyopgebeNGo2noas15KkjQqT4CcAfxSUQMBSbtf_Wo"
+
+file0: Koala.jpg
+
