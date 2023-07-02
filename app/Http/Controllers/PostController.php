@@ -31,21 +31,23 @@ class PostController extends Controller{
 
 	//Get a post
 	public function show($id){
-		$post = Post::find($id)->load('category', 'user');
-		if (is_object($post)) {
-			$post = [
-				'status'		=> "success",
-				'code'			=> 200,
-				'post'			=> $post
+		$post = Post::find($id);
+		if ($post) {
+			$post->load('category', 'user');
+
+			$response = [
+				'status' => "success",
+				'code' => 200,
+				'post' => $post
 			];
 		} else {
-			$post = [
-				'status'		=> "Error",
-				'code'			=> 404,
-				'message'		=> "Post is not found",
+			$response = [
+				'status' => "Error",
+				'code' => 404,
+				'message' => "Post not found",
 			];
 		}
-		return response()->json($post, $post['code']);
+		return response()->json($response, $response['code']);
 	}
 
 	//Save a post
@@ -127,8 +129,8 @@ class PostController extends Controller{
 				$post = Post::where(['id' => $id, 'user_id' => $user->sub])->update($params_array);
 				$update = [
 					'status'   => $post ? "Success" : "Error",
-					'code'     => $post ? 200 : 400,
-					'message'  => $post ? "Post updated successfully" : "Failed to update post"
+					'code'     => $post ? 200 : 422,
+					'message'  => $post ? "Post updated successfully" : "Unable to update the post. Either the post was not found or you are not authorized."
 				];
 			}
 		} else {
@@ -158,8 +160,8 @@ class PostController extends Controller{
 		} else {
 			$delete = [
 				'status'	=> "Error",
-				'code'		=> 404,
-				'message'	=> 'Error to delete'
+				'code'		=> 422,
+				'message'	=> 'Unable to delete the post. Either the post was not found or you are not authorized.'
 			];
 		}
 		return response()->json($delete, $delete['code']);
@@ -220,9 +222,18 @@ class PostController extends Controller{
 	public function getPostsByCategory($id){
 		$posts = Post::where('category_id', $id)->get();
 
+		if ($posts->isEmpty()) {
+			return response()->json([
+				'status' => 'Error',
+				'code'		=> 404,
+				'message' => 'No posts found for the specified category.',
+			], 404);
+		}
+
 		return response()->json([
-			'status'	=> 'Success',
-			'posts'	=> $posts
+			'status' => 'Success',
+			'code'		=> 200,
+			'posts' => $posts
 		], 200);
 	}
 
@@ -230,9 +241,18 @@ class PostController extends Controller{
 	public function getPostsByUser($id){
 		$posts = Post::where('user_id', $id)->get();
 
+		if ($posts->isEmpty()) {
+			return response()->json([
+				'status' => 'Error',
+				'code'		=> 404,
+				'message' => 'No posts found for the specified user.',
+			], 404);
+		}
+
 		return response()->json([
-			'status'	=> 'Success',
-			'posts'	=> $posts
+			'status' => 'Success',
+			'code'		=> 200,
+			'posts' => $posts
 		], 200);
 	}
 }
