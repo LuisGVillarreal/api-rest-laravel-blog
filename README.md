@@ -7,54 +7,82 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
 </p>
 
-## About Laravel
+## API Blog
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Descripción:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+La API del blog es una interfaz que permite interactuar con el sistema de un blog mediante una serie de solicitudes. Proporciona diversas funcionalidades, como el registro de usuarios, la gestión de categorías, la publicación y actualización de posts, y la obtención de información detallada sobre usuarios, categorías y posts.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Puedes ver los endpoints [aquí](https://documenter.getpostman.com/view/25432378/2s93zCY17t).
 
-## Learning Laravel
+A continuación, se detallan los títulos y descripciones de las solicitudes disponibles:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+#### Usuarios:
 
-## Laravel Sponsors
+1. **Registro de usuario** (*POST* - `/api/register`):
+   Esta solicitud permite registrar a un nuevo usuario en el sistema del blog.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+2. **Inicio de sesión** (*POST* - `/api/login`):
+   Esta solicitud permite a un usuario autenticarse en el sistema del blog.
 
-### Premium Partners
+3. **Obtener detalles de un usuario** (*GET* - `/api/user/detail/{id}`):
+   Esta solicitud devuelve información detallada sobre un usuario específico en el sistema del blog.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[OP.GG](https://op.gg)**
+4. **Obtener avatar de un usuario** (*GET* - `/api/user/avatar/{filename}`):
+   Esta solicitud recupera el avatar de un usuario en el sistema del blog.
 
-## Contributing
+5. **Subir avatar de un usuario** (*POST* - `/api/user/upload`):
+   Esta solicitud permite a un usuario cargar un avatar en el sistema del blog.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+6. **Actualizar información de un usuario** (*PUT* - `/api/user/update`):
+   Esta solicitud actualiza la información de un usuario específico en el sistema del blog.
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+#### Categorías:
 
-## Security Vulnerabilities
+1. **Guardar una categoría** (*POST* - `/api/category`):
+   Esta solicitud guarda una nueva categoría en el sistema del blog.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+2. **Actualizar una categoría** (*PUT* - `/api/category/{id}`):
+   Esta solicitud actualiza el nombre de una categoría existente en el sistema del blog.
+
+3. **Obtener detalles de una categoría** (*GET* - `/api/category/{id}`):
+   Esta solicitud devuelve información detallada sobre una categoría específica en el sistema del blog.
+
+4. **Obtener todas las categorías** (*GET* - `/api/category`):
+   Esta solicitud devuelve una lista de todas las categorías disponibles en el sistema del blog.
+
+---
+
+#### Posts:
+
+1. **Guardar un post** (*POST* - `/api/post`):
+   Esta solicitud guarda un nuevo post en el sistema del blog.
+
+2. **Actualizar un post** (*PUT* - `/api/post/{id}`):
+   Esta solicitud actualiza los detalles de un post específico en el sistema del blog.
+
+3. **Eliminar un post** (*DELETE* - `/api/post/{id}`):
+   Esta solicitud elimina un post específico del sistema del blog.
+
+4. **Obtener una imagen de un post** (*GET* - `/api/post/image/{filename}`):
+   Esta solicitud recupera una imagen asociada a un post en el sistema del blog.
+
+5. **Obtener detalles de un post** (*GET* - `/api/post/{id}`):
+   Esta solicitud devuelve información detallada sobre un post específico en el sistema del blog.
+
+6. **Obtener todos los posts** (*GET* - `/api/post`):
+   Esta solicitud devuelve una lista de todos los posts disponibles en el sistema del blog.
+
+7. **Obtener posts por categoría** (*GET* - `/api/post/category/{id}`):
+   Esta solicitud devuelve una lista de posts asociados a una categoría específica en el sistema del blog.
+
+8. **Obtener posts por usuario** (*GET* - `/api/post/user/{id}`):
+   Esta solicitud devuelve una lista de posts asociados a un usuario específico en el sistema del blog.
+
 
 ## License
 
